@@ -9,7 +9,7 @@ var playerAttack = 10;
 var playerMoney = 10;
 
 // you can also log multiple values at once like this 
-console.log(playerName, playerAttack, playerHealth, playerMoney);
+//console.log(playerName, playerAttack, playerHealth, playerMoney);
 
 var enemyNames = ["Roborto", "Amy Android", "Robo Trumble"];
 var enemyHealth = 50;
@@ -29,7 +29,7 @@ var fight = function(enemyName) {
       if (confirmSkip) {
         window.alert(playerName + " has decided to skip this fight. Goodbye!");
         //subtract money for skipping
-        playerMoney = playerMoney - 10;
+        playerMoney = Math.max(0, playerMoney - 10);
         console.log("playerMoney", playerMoney);
         break;
       }
@@ -40,7 +40,9 @@ var fight = function(enemyName) {
     // if player chose fight
     if (promptFight === "FIGHT" || promptFight === "fight") {
       //Subtract the value of `playerAttack` from the value of `enemyHealth` and use that result to update the value in the `enemyHealth` variable
-      enemyHealth = enemyHealth - playerAttack;
+      var damage = randomNumber(playerAttack - 3, playerAttack);
+
+      enemyHealth = Math.max(0, enemyHealth - damage);
       // Log a resulting message to the console so we know that it worked.
       console.log(
         playerName + " attacked " + enemyName + ". " + enemyName + " now has " + enemyHealth + " health remaining."
@@ -59,7 +61,9 @@ var fight = function(enemyName) {
       }
       
       // Subtract the value of `enemyAttack` from the value of `playerHealth` and use that result to update the value in the `playerHealth` variable.
-      playerHealth = playerHealth - enemyAttack;
+      var damage = randomNumber(playerAttack - 3, playerAttack);
+
+      playerHealth = Math.max(0, playerHealth - damage);
       // Log a resulting message to the console so we know that it worked.
       console.log(
         enemyName + " attacked " + playerName + ". " + playerName + " now has " + playerHealth + " health remaining."
@@ -76,6 +80,13 @@ var fight = function(enemyName) {
   }
 };
 
+// function to generate a random numeric value
+var randomNumber = function(min, max) {
+  var value = Math.floor(Math.random() * (max - min + 1) + min);
+
+  return value;
+};
+
 //function to start new game
 var startGame = function() {
   //reset player stats
@@ -90,8 +101,8 @@ var startGame = function() {
   
       var pickedEnemyName = enemyNames[i];
   
-      enemyHealth = 50;
-      
+      enemyHealth = randomNumber(40, 60);
+      //calls fight function above
       fight(pickedEnemyName);
 
       //if player is still alive and we're not at the last enemy in the array
@@ -187,4 +198,4 @@ var shop = function() {
 };
 
 //start the game when the page loads
-//startGame();
+startGame();
